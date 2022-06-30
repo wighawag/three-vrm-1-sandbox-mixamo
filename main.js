@@ -25,8 +25,11 @@ scene.add( light );
 let currentVRM = undefined; // 現在使用中のvrm、update内で使えるようにするため
 let currentMixer = undefined; // 現在使用中のAnimationMixer、update内で使えるようにするため
 
-const modelUrl = './meebit_05965.vrm'; //'./three-vrm-girl-1.0-beta.vrm'; //'https://cdn.glitch.me/c4e5cfb3-513e-4d82-a37f-62836378466b%2Fthree-vrm-girl-1.0-beta.vrm?v=1636610288920'; // モデルのURL
-const animationUrl = './Gangnam Style.fbx'; // './Capoeira.fbx'; //'./Gangnam Style.fbx'; '//https://cdn.glitch.me/16b81be8-1f14-4a44-b78f-c3f6da842ee7%2FGangnam%20Style.fbx?v=1636708670740'; // MixamoのアニメーションのURL
+// const modelUrl = 'https://cdn.glitch.me/c4e5cfb3-513e-4d82-a37f-62836378466b%2Fthree-vrm-girl-1.0-beta.vrm?v=1636610288920'; // モデルのURL
+const modelUrl = './meebit_05965.vrm'; //'./three-vrm-girl-1.0-beta.vrm';
+
+// const animationUrl = 'https://cdn.glitch.global/b233b4ea-cf6c-403a-bb68-82babee52d57/Capoeira%20(1).fbx?v=1642556259178'; // MixamoのアニメーションのURL
+const animationUrl = './Capoeira (1).fbx'//'./Gangnam Style.fbx'; 
 
 // See: https://threejs.org/docs/#manual/en/introduction/Animation-system
 loadVRM( modelUrl ).then( ( vrm ) => { // vrmを読み込む
