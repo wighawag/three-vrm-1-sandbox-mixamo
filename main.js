@@ -29,7 +29,7 @@ let currentMixer = undefined; // 現在使用中のAnimationMixer、update内で
 const modelUrl = './meebit_05965.vrm'; //'./three-vrm-girl-1.0-beta.vrm';
 
 // const animationUrl = 'https://cdn.glitch.global/b233b4ea-cf6c-403a-bb68-82babee52d57/Capoeira%20(1).fbx?v=1642556259178'; // MixamoのアニメーションのURL
-const animationUrl = './Capoeira (1).fbx'//'./Gangnam Style.fbx'; 
+const animationUrl = './Mma Kick.fbx'; // './Capoeira (1).fbx'//'./Gangnam Style.fbx'; 
 
 // See: https://threejs.org/docs/#manual/en/introduction/Animation-system
 loadVRM( modelUrl ).then( ( vrm ) => { // vrmを読み込む
