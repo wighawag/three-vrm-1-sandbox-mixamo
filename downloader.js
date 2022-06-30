@@ -21,8 +21,8 @@
 
 // CHANGE THIS VAR TO DOWNLOAD ANIMATIONS FOR A DIFFERENT CHARACTER
 // const character = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
-const character = 'ef7eb018-7cf3-4ae1-99ac-bab1c2c5d419'
-
+const character = '2dee24f8-3b49-48af-b735-c6377509eaac'; //'ef7eb018-7cf3-4ae1-99ac-bab1c2c5d419'
+const perPage = 96;
 
 //=================================================================================================
 
@@ -41,7 +41,7 @@ const getAnimationList = (page) => {
         }
     };
 
-    const listUrl = `https://www.mixamo.com/api/v1/products?page=${page}&limit=96&order=&type=Motion%2CMotionPack&query=`;
+    const listUrl = `https://www.mixamo.com/api/v1/products?page=${page}&limit=${perPage}&order=&type=Motion%2CMotionPack&query=`;
     return fetch(listUrl, init).then((res) => res.json()).then((json) => json).catch(() => Promise.reject('Failed to download animation list'))
 }
 
@@ -81,9 +81,13 @@ const downloadAnimation = (animId, character, product_name) => {
     }
 }
 
+let pageCounter = 0;
+let counter = 0;
 const downloadAnimLoop = (o) => {
     console.log('downloadAnimLoop');
     if (!o.anims.length) {
+        pageCounter++;
+        console.log(`page done: ${pageCounter}`)
         return downloadAnimsInPage(o.currentPage + 1, o.totPages, o.character); // no anims left, get a new page
     }
 
@@ -91,8 +95,15 @@ const downloadAnimLoop = (o) => {
     const tail = o.anims.slice(1);
     o.anims = tail;
 
-    return downloadAnimation(head.id, o.character, head.description)
-        .then(() => downloadAnimLoop(o)) //loop
+    return downloadAnimation(head.id, o.character, `${head.name}_${head.id}`) // it was head.description instead of head.name_head.id
+        .then(() => {
+            counter++;
+            console.log(`downloaded suscessfully: ${counter}`)
+        }).then(() => {
+            return new Promise((resolve) => setTimeout(resolve, 2000))
+        }).then(() => {
+            downloadAnimLoop(o)
+        }) //loop
         .catch(() => {
             console.log("Recovering from animation failed to downlaod");
             return downloadAnimLoop(o) // keep on looping 
@@ -107,13 +118,16 @@ var downloadAnimsInPage = (page, totPages, character) => {
     }
 
     return getAnimationList(page)
-        .then((json) => (
-            {
+        .then((json) => {
+            const data = {
                 anims: json.results,
                 currentPage: json.pagination.page,
                 totPages: json.pagination.num_pages,
                 character
-            }))
+            };
+            console.log({...data, anims: data.anims.concat()});
+            return data;
+        })
         .then((o) => downloadAnimLoop(o))
         .catch((e) => Promise.reject("Unable to download all animations error ", e))
 }
@@ -148,7 +162,10 @@ const exportAnimation = (character_id, gmsHashArray, product_name) => {
         },
         body: JSON.stringify(exportBody)
     }
-    return fetch(exportUrl, exportInit).then((res) => res.json()).then((json) => json)
+    return fetch(exportUrl, exportInit).then((res) => res.json()).then((json) => json).catch((err) => {
+        console.error('ERROR', err);
+        Promise.reject(err);
+    })
 }
 
 const monitorAnimation = (characterId) => {
