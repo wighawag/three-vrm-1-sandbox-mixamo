@@ -48,7 +48,7 @@ loadVRM( modelUrl ).then( ( vrm ) => { // vrmを読み込む
   // camera.position.set( 0.0, head.getWorldPosition( new THREE.Vector3() ).y, 6.0 ); // カメラを頭が中心に来るように動かす
 
   const pos =  head.getWorldPosition( new THREE.Vector3() );
-  controls.target.fromArray([pos.x,pos.y, pos.z])
+  controls.target.fromArray([pos.x,pos.y + 0.2, pos.z])
   controls.update()
 
 
