@@ -73,7 +73,7 @@ const downloadAnimation = (animId, character, product_name) => {
                 .then((json) => json.details.gms_hash)
                 .then((gms_hash) => {
                     const pvals = gms_hash.params.map((param) => param[1]).join(',')
-                    const _gms_hash = Object.assign({}, gms_hash, { params: pvals }) // Anim is baked with default param values
+                    const _gms_hash = Object.assign({}, gms_hash, { params: pvals, inplace: true }) // Anim is baked with default param values
                     return exportAnimation(character, [_gms_hash], product_name)
                 })
                 .then((json) => monitorAnimation(character))
