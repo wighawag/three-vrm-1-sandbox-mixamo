@@ -21,6 +21,10 @@ const light = new THREE.DirectionalLight( 0xffffff );
 light.position.set( 1.0, 1.0, 1.0 ).normalize();
 scene.add( light );
 
+// ambient
+const ambient = new THREE.AmbientLight( 0x222222 );
+scene.add( ambient );
+
 // -- vrm ------------------------------------------------------------------------------------------
 let currentVRM = undefined; // 現在使用中のvrm、update内で使えるようにするため
 let currentMixer = undefined; // 現在使用中のAnimationMixer、update内で使えるようにするため
@@ -29,7 +33,11 @@ let currentMixer = undefined; // 現在使用中のAnimationMixer、update内で
 const modelUrl = './meebit_05965.vrm'; //'./three-vrm-girl-1.0-beta.vrm';
 
 // const animationUrl = 'https://cdn.glitch.global/b233b4ea-cf6c-403a-bb68-82babee52d57/Capoeira%20(1).fbx?v=1642556259178'; // MixamoのアニメーションのURL
-const animationUrl = './Mma Kick.fbx'; // './Capoeira (1).fbx'//'./Gangnam Style.fbx'; 
+// const animationUrl = './Mma Kick.fbx'; // './Capoeira (1).fbx'//'./Gangnam Style.fbx'; 
+// const animationUrl = 'mixamo/animations/'+ location.hash.slice(1);
+const animationUrl = './mixamo/animations/Running_c9c6cb0d-b96c-11e4-a802-0aaa78deedf9.fbx';
+
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 // See: https://threejs.org/docs/#manual/en/introduction/Animation-system
 loadVRM( modelUrl ).then( ( vrm ) => { // vrmを読み込む
@@ -37,7 +45,12 @@ loadVRM( modelUrl ).then( ( vrm ) => { // vrmを読み込む
   scene.add( vrm.scene ); // モデルをsceneに追加し、表示できるようにする
 
   const head = vrm.humanoid.getBoneNode( 'head' ); // vrmの頭を参照する
-  camera.position.set( 0.0, head.getWorldPosition( new THREE.Vector3() ).y, 6.0 ); // カメラを頭が中心に来るように動かす
+  // camera.position.set( 0.0, head.getWorldPosition( new THREE.Vector3() ).y, 6.0 ); // カメラを頭が中心に来るように動かす
+
+  const pos =  head.getWorldPosition( new THREE.Vector3() );
+  controls.target.fromArray([pos.x,pos.y, pos.z])
+  controls.update()
+
 
   currentMixer = new THREE.AnimationMixer( vrm.scene ); // vrmのAnimationMixerを作る
   currentMixer.timeScale = 1;
